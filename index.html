@@ -13,7 +13,7 @@
 
     <!-- Include the compiled Ratchet CSS -->
     <link href="ratchet/dist/css/ratchet.css" rel="stylesheet">
-    <link href="attendia.css" rel="stylesheet">
+    <link href="css/attendia.css" rel="stylesheet">
 
     <!-- Include the compiled Ratchet JS -->
     <script src="ratchet/dist/js/ratchet.js"></script>
@@ -25,25 +25,25 @@
       <h1 class="title">Attendia</h1>
     </header>
 
-    <div class="content">
+    <div class="content app-container">
       <div class="content-padded">
 
-        <h2 class="introduction">Welcome!</h2>
+        <h2 class="introduction">Welcome to Attendia!</h2>
 
         <div class="content-padded login-container">
           <div class="content-padded existing-user-container">
             <div class="existing-user-element">
-              <h4>Existing Users</h4>
+              <h4 class="user-content">Existing Users</h4>
             </div>
             <div class="content-padded">
-              <button class="btn btn-primary btn-block">Sign In</button>
+              <button class="btn btn-primary btn-block signin-btn">Sign In</button>
             </div>
           </div>
 
           <div class="content-padded sign-in-container">
             <h4 class="account-content">Don't have an account?</h4>
             <div class="content-padded">
-              <button class="btn btn-primary btn-block">Sign Up!</button>
+              <button class="btn btn-primary btn-block signup-btn">Sign Up</button>
             </div>
           </div>
         </div>
@@ -53,7 +53,7 @@
     
 
 
-    <nav class="bar bar-tab">
+    <!-- <nav class="bar bar-tab">
       <a class="tab-item active" href="#">
         <span class="icon icon-home"></span>
         <span class="tab-label">Home</span>
@@ -74,7 +74,8 @@
         <span class="icon icon-gear"></span>
         <span class="tab-label">Settings</span>
       </a>
-    </nav>
-
+    </nav> -->
+    <script src="https://code.jquery.com/jquery-3.1.1.js" integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>
+    <script src="js/attendia.js"></script>
   </body>
 </html>
