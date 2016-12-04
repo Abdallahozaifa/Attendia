@@ -11,3 +11,12 @@
 .login-container{
 	margin-top: 15%;
 }
+
+.existing-user-container, .sign-in-container{
+	margin-top: 10%;
+}
+
+.existing-user-element, .account-content{
+	margin-bottom: 10%;
+}
+
