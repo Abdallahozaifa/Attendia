@@ -8,16 +8,16 @@
 
 .introduction{
 	text-align: center;
-	margin-top: 20%;
+	margin-top: 15%;
 	color: #1da1f2; 
 }
 
 .login-container{
-	margin-top: 25%;
+	margin-top: 15%;
 }
 
 .existing-user-container, .sign-in-container{
-	margin-top: 20%;
+	margin-top: 15%;
 }
 
 .existing-user-element, .account-content{
@@ -29,5 +29,8 @@
 	font-size: 23px;
 }
 
+body{
+    display:none;
+}
 
 
