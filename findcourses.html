@@ -25,61 +25,54 @@
       <h1 class="title">Attendia</h1>
     </header>
 
-
     <!-- Segmented control in standard bar fixed to top -->
 	<nav class="bar bar-standard">
 	  <div class="segmented-control">
-	    <a class="control-item active">My Courses</a>
-	    <a class="control-item">Find Courses</a>
+	    <a class="control-item mycourses-item">My Courses</a>
+	    <a class="control-item active findcourses-item">Find Courses</a>
 	  </div>
 	</nav>
 
-	<ul class="table-view">
-	  <li class="table-view-cell">
-	    <a class="navigate-right">
-	    <span class="badge">5</span>
-	      Sweng 411
-	    </a>
-	  </li>
+	<div class="content">
+		<div class="content-padded">
+			<form>
+		  		<input type="search" placeholder="Search">
+			</form>
+			<ul class="table-view">
+			  <li class="table-view-cell media">
+			    <a class="navigate-right">
+			      <img class="media-object pull-left" src="http://placehold.it/42x42">
+			      <div class="media-body">
+			        Item 1
+			        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.</p>
+			      </div>
+			    </a>
+			  </li>
+			  <li class="table-view-cell media">
+			    <a class="navigate-right">
+			      <img class="media-object pull-left" src="http://placehold.it/42x42">
+			      <div class="media-body">
+			        Item 1
+			        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.</p>
+			      </div>
+			    </a>
+			  </li>
+			  <li class="table-view-cell media">
+			    <a class="navigate-right">
+			      <img class="media-object pull-left" src="http://placehold.it/42x42">
+			      <div class="media-body">
+			        Item 1
+			        <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore. Lorem ipsum dolor sit amet.</p>
+			      </div>
+			    </a>
+			  </li>
+			</ul>
 
-	  <li class="table-view-cell">
-	    <a class="navigate-right">
-	    <span class="badge">5</span>
-	      Cas 100A
-	    </a>
-	  </li>
-
-	  <li class="table-view-cell">
-	    <a class="navigate-right">
-	    <span class="badge">5</span>
-	      Math 140
-	    </a>
-	  </li>
-
-	  <li class="table-view-cell">
-	    <a class="navigate-right">
-	    <span class="badge">5</span>
-	      Math 140
-	    </a>
-	  </li>
-
-	  <li class="table-view-cell">
-	    <a class="navigate-right">
-	    <span class="badge">5</span>
-	      Math 140
-	    </a>
-	  </li>
-
-	  <li class="table-view-cell">
-	    <a class="navigate-right">
-	    <span class="badge">5</span>
-	      Math 140
-	    </a>
-	  </li>
-	</ul>
+		</div>
+	</div>
 
    <nav class="bar bar-tab">
-      <a class="tab-item course-item">
+      <a class="tab-item active course-item">
         <span class="icon icon-home"></span>
         <span class="tab-label">Courses</span>
       </a>
@@ -87,7 +80,7 @@
         <span class="icon icon-person"></span>
         <span class="tab-label">Profile</span>
       </a>
-      <a class="tab-item active">
+      <a class="tab-item">
         <span class="icon icon-compose messageboard-item"></span>
         <span class="tab-label">Message Board</span>
       </a>
@@ -97,7 +90,7 @@
       </a>
     </nav>
 
-    <!-- Block button in standard bar fixed above the footer -->
+	<!-- Block button in standard bar fixed above the footer -->
 	<div class="bar bar-standard bar-footer-secondary">
 	  <button class="btn btn-block">Student</button>
 	</div>

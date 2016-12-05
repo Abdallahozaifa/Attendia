@@ -25,25 +25,75 @@
       <h1 class="title">Attendia</h1>
     </header>
 
+    <!-- Segmented control in standard bar fixed to top -->
+	<nav class="bar bar-standard">
+	  <div class="segmented-control">
+	    <a class="control-item active mycourses-item">My Courses</a>
+	    <a class="control-item findcourses-item">Find Courses</a>
+	  </div>
+	</nav>
+
+	<ul class="table-view">
+	  <li class="table-view-cell">
+	    <a class="navigate-right">
+	      Sweng 411
+	    </a>
+	  </li>
+
+	  <li class="table-view-cell">
+	    <a class="navigate-right">
+	      Cas 100A
+	    </a>
+	  </li>
+
+	  <li class="table-view-cell">
+	    <a class="navigate-right">
+	      Math 140
+	    </a>
+	  </li>
+
+	  <li class="table-view-cell">
+	    <a class="navigate-right">
+	      Math 140
+	    </a>
+	  </li>
+
+	  <li class="table-view-cell">
+	    <a class="navigate-right">
+	      Math 140
+	    </a>
+	  </li>
+
+	  <li class="table-view-cell">
+	    <a class="navigate-right">
+	      Math 140
+	    </a>
+	  </li>
+	</ul>
 
    <nav class="bar bar-tab">
-      <a class="tab-item active" href="courses.html">
+      <a class="tab-item active course-item">
         <span class="icon icon-home"></span>
         <span class="tab-label">Courses</span>
       </a>
-      <a class="tab-item" href="profile.html">
+      <a class="tab-item profile-item" >
         <span class="icon icon-person"></span>
         <span class="tab-label">Profile</span>
       </a>
-      <a class="tab-item" href="messageboard.html">
-        <span class="icon icon-compose"></span>
+      <a class="tab-item">
+        <span class="icon icon-compose messageboard-item"></span>
         <span class="tab-label">Message Board</span>
       </a>
-      <a class="tab-item" href="calendar.html">
-        <span class="icon icon-pages"></span>
+      <a class="tab-item">
+        <span class="icon icon-pages calendar-item"></span>
         <span class="tab-label">Calendar</span>
       </a>
     </nav>
+
+	<!-- Block button in standard bar fixed above the footer -->
+	<div class="bar bar-standard bar-footer-secondary">
+	  <button class="btn btn-block">Student</button>
+	</div>
 
     <script src="https://code.jquery.com/jquery-3.1.1.js" integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>
     <script src="js/attendia.js"></script>  
