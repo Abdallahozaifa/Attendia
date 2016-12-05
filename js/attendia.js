@@ -31,7 +31,10 @@ $(document).ready(function(){
 	       console.log(email.val());
 	     }
 	     console.log(userName.val());
-	     console.log(password.val()); 
+	     console.log(password.val());
+
+	     // Information is validated, goes to dashboard
+	     window.location.href = "courses.html";
 	  }); 
 	}
 	
