@@ -35,14 +35,34 @@ $(document).ready(function(){
 	   });
 	}
 	
+	var User = Taffy();
 	if(submitBtn != null){
 	  submitBtn.click(function(){
-	     if(fullName.val() != null){
+
+	  	 // User is logging in
+	     if(fullName.val() == null){
+	       console.log("User is logging in!");
 	       console.log(fullName.val());
 	       console.log(email.val());
 	     }
-	     console.log(userName.val());
-	     console.log(password.val());
+
+	     // User is signing up 
+	     else{
+	     	console.log("User is signing up!");
+	     	console.log(fullName.val());
+	        console.log(email.val());
+	     	console.log(userName.val());
+	     	console.log(password.val());
+	     	User.insert({
+	     		fullName: fullName.val(),
+	     		email: email.val(),
+	     		userName: userName.val(),
+	     		password: password.val()
+	     	});
+	     	console.log("User inserted into database!");
+	     }
+	     
+
 
 	     // Information is validated, goes to dashboard
 	     window.location.href = "courses.html";
