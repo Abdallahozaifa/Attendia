@@ -20,38 +20,36 @@
   </head>
   <body>
 
-    <!-- Make sure all your bars are the first things in your <body> -->
+  <!-- Make sure all your bars are the first things in your <body> -->
     <header class="bar bar-nav">
       <h1 class="title">Attendia</h1>
+      <a class="icon icon-left-nav pull-left"></a>
     </header>
 
-    <div class="content app-container">
-      <div class="content-padded">
-
-        <h2 class="introduction">Welcome!</h2>
-
-        <div class="content-padded login-container">
-          <div class="content-padded existing-user-container">
-            <div class="existing-user-element">
-              <h4 class="user-content">Existing Users</h4>
+    <div class="content">
+          <form>
+            <div class="input-group">
+              <div class="input-row">
+                <label>Username</label>
+                <input type="text" placeholder="spidey" class="username">
+              </div>
+              <div class="input-row">
+                <label>Password</label>
+                <input type="password" placeholder="spidey" class="password">
+              </div>
             </div>
+           
             <div class="content-padded">
-              <button class="btn btn-primary btn-block signin-btn">Sign In</button>
-            </div>
-          </div>
+            
+            </div>    
+          </form>
 
-          <div class="content-padded sign-in-container">
-            <h4 class="account-content">Don't have an account?</h4>
-            <div class="content-padded">
-              <button class="btn btn-primary btn-block student-btn">Student</button>
-              <button class="btn btn-primary btn-block professor-btn">Professor</button>
-            </div>
+          <div class="content-padded">
+            <button class="btn btn-primary btn-block submitBtn">Submit</button>
           </div>
-        </div>
-      </div>
     </div>
-    
+
     <script src="https://code.jquery.com/jquery-3.1.1.js" integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>
-    <script src="js/attendia.js"></script>
+    <script src="js/attendia.js"></script>  
   </body>
-</html>
+</html>  
