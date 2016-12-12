@@ -51,27 +51,31 @@ $(document).ready(function() {
 				type: "POST",
 				data: JSON.stringify(user),
 				contentType: "application/json",
-				dataType: 'json',
-				async: false,
-				success: function(data){
-					console.log(data);
-				},
+				dataType: 'json'
+			}).done(function(result){
+				console.log(result.response);
 				
+				// User does not exist!
+				if(result.response == 'User does not exists!'){
+					var pageCont = $(".content");
+					var errorDiv = $("<div>", {"class": "content-padded"});
+					var submitButtn = $(".submitButton");
+					var errorBtn = $('<button/>', { 
+						text: 'Invalid Credentials!',
+						"class": "btn btn-negative btn-block"
+					});
+					
+					errorDiv.append(errorBtn);
+					pageCont.append(errorDiv);
+					
+					
+					
+				
+				// User exists!
+				}else if(result.response == 'User exists!'){
+					
+				}
 			});
-
-			// // User is logging in
-			// if (fullName.val() == null) {
-			// 	console.log("User is logging in!");
-			// 	console.log(user);
-			// }
-
-			// // User is signing up 
-			// else {
-			// 	console.log("User is signing up!");
-			// 	console.log(user);
-			// }
-
-
 
 			// Information is validated, goes to dashboard
 			//window.location.href = "courses.html";

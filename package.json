@@ -1,0 +1,22 @@
+{
+  "name": "attendia",
+  "version": "1.0.0",
+  "description": "sweng411 final project",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "mongodb": "~2.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Abdallahozaifa/Attendia.git"
+  },
+  "author": "Hozaifa Abdalla, Andy Zheng",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Abdallahozaifa/Attendia/issues"
+  },
+  "homepage": "https://github.com/Abdallahozaifa/Attendia#readme"
+}
