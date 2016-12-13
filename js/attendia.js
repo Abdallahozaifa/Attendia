@@ -1,7 +1,10 @@
-/* global $*/
+/* global $, User, localStorage*/
 $(document).ready(function() {
 	console.log("Attendia JS Loaded!!");
-
+	
+	// Retrieve the object from storage
+	var UserFetched = JSON.parse(localStorage.getItem('User'));
+	
 	// Front Page Components
 	var signInBtn = $(".signin-btn");
 	var studentBtn = $(".student-btn");
@@ -12,8 +15,22 @@ $(document).ready(function() {
 	var userName = $(".username");
 	var password = $(".password");
 	var submitBtn = $(".submitBtn");
+	var courseItem = $(".course-item");
+	var profileItem = $(".profile-item");
+	var messageBoardItem = $(".messageboard-item");
+	var calendarItem = $(".calendar-item");
 	var identity = null;
-
+	var userNameDisplay = $(".username-display");
+	
+	console.log(userNameDisplay);
+	userNameDisplay.text("Welcome " + UserFetched.userName + "!");
+	console.log(UserFetched);
+	if(UserFetched != null){
+		console.log(UserFetched.name);
+		console.log(UserFetched.email);
+		console.log(UserFetched.userName);
+	}
+	
 	// Click Handlers for components    
 	signInBtn.click(function() {
 		window.location.href = "signin.html";
@@ -36,6 +53,7 @@ $(document).ready(function() {
 		});
 	}
 
+	// User submits form on Log In page or Sign Up Page
 	if (submitBtn != null) {
 		submitBtn.click(function() {
 
@@ -45,7 +63,18 @@ $(document).ready(function() {
 				userName: userName.val(),
 				password: password.val()
 			};
-
+			
+			User.setName(user.fullName);
+			User.setEmail(user.email);
+			User.setUserName(user.userName);
+			
+			console.log(User.getName());
+			console.log(User.getEmail());
+			console.log(User.getUserName());
+			
+			// Put the object into storage
+			localStorage.setItem('User', JSON.stringify(User));
+			
 			$.ajax({
 				url: "/userinfo",
 				type: "POST",
@@ -64,28 +93,34 @@ $(document).ready(function() {
 						text: 'Invalid Credentials!',
 						"class": "btn btn-negative btn-block"
 					});
-					
+					submitButtn.hide();
 					errorDiv.append(errorBtn);
 					pageCont.append(errorDiv);
 					
+					setTimeout(function(){ 
+						errorDiv.hide();
+						submitButtn.show();
+					}, 3000);
 					
 					
 				
 				// User exists!
 				}else if(result.response == 'User exists!'){
-					
+					// Information is validated, goes to dashboard
+					window.location.href = "courses.html";
+				}
+				
+				// User is Signing Up
+				else if(result.response == 'User successfully signed up!'){
+					// Information is validated, goes to dashboard
+					window.location.href = "courses.html";
 				}
 			});
 
-			// Information is validated, goes to dashboard
-			//window.location.href = "courses.html";
+			
 		});
 	}
 
-	var courseItem = $(".course-item");
-	var profileItem = $(".profile-item");
-	var messageBoardItem = $(".messageboard-item");
-	var calendarItem = $(".calendar-item");
 	if (courseItem != null) {
 		courseItem.click(function() {
 			window.location.href = "courses.html";
@@ -124,4 +159,21 @@ $(document).ready(function() {
 		});
 	}
 
+	/* Searching courses algorithm */
+	$("#search").on("keyup", function() {
+	    var value = $(this).val();
+		console.log(value);
+		
+		if(value != ""){
+			$.ajax({
+					url: "/searchCourse",
+					type: "POST",
+					data: JSON.stringify({searchStr: value}),
+					contentType: "application/json",
+					dataType: 'json'
+				}).done(function(courses){
+					console.log(courses);
+				});
+		}
+	});
 });
