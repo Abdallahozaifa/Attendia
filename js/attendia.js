@@ -3,7 +3,9 @@ $(document).ready(function() {
 	console.log("Attendia JS Loaded!!");
 	
 	// Retrieve the object from storage
-	var UserFetched = JSON.parse(localStorage.getItem('User'));
+	if(localStorage.getItem('User') != undefined){
+		var UserFetched = JSON.parse(localStorage.getItem('User'));
+	}
 	
 	// Front Page Components
 	var signInBtn = $(".signin-btn");
@@ -22,13 +24,14 @@ $(document).ready(function() {
 	var identity = null;
 	var userNameDisplay = $(".username-display");
 	
-	console.log(userNameDisplay);
-	userNameDisplay.text("Welcome " + UserFetched.userName + "!");
-	console.log(UserFetched);
 	if(UserFetched != null){
-		console.log(UserFetched.name);
-		console.log(UserFetched.email);
-		console.log(UserFetched.userName);
+		if(userNameDisplay != null){
+			userNameDisplay.text("Welcome " + UserFetched.userName + "!");	
+		}
+	}
+
+	if(UserFetched != null){
+		console.log(UserFetched);
 	}
 	
 	// Click Handlers for components    
@@ -72,9 +75,6 @@ $(document).ready(function() {
 			console.log(User.getEmail());
 			console.log(User.getUserName());
 			
-			// Put the object into storage
-			localStorage.setItem('User', JSON.stringify(User));
-			
 			$.ajax({
 				url: "/userinfo",
 				type: "POST",
@@ -83,6 +83,9 @@ $(document).ready(function() {
 				dataType: 'json'
 			}).done(function(result){
 				console.log(result.response);
+				console.log(result);
+				
+				localStorage.setItem('User', JSON.stringify(result.userObj));
 				
 				// User does not exist!
 				if(result.response == 'User does not exists!'){
@@ -158,11 +161,75 @@ $(document).ready(function() {
 			window.location.href = "findcourses.html";
 		});
 	}
-
+	
+	var addCourseToPage = function(title, description){
+		var liTag = $('<li/>').appendTo('.classes-section');
+		liTag.addClass("table-view-cell media searched-course");
+		var aTag = $("<a/>");
+		aTag.addClass("navigate-right");
+		aTag.click(function(){
+			this.closest("li").remove();
+			var classCont = $(this).children().html();
+			classCont = classCont.substring(0, classCont.indexOf('<'));
+			var usrGot = JSON.parse(localStorage.getItem('User'));
+			usrGot.courses.push(classCont);
+			localStorage.setItem('User', JSON.stringify(usrGot));
+			
+			console.log(JSON.parse(localStorage.getItem('User')));
+		});
+		var courseDiv = $("<div>", {"class": "media-body"});
+		
+		liTag.append(aTag);
+		aTag.append(courseDiv);
+		courseDiv.text(title);
+		courseDiv.append("<p>" + description + "</p>");
+	};
+	
+	var addUsrCourses = function(courseInfo){
+		var liTag = $('<li/>').appendTo('.courses-table');
+		liTag.addClass("table-view-cell user-chosen-course");
+		var aTag = $("<a/>");
+		aTag.addClass("navigate-right");
+		liTag.append(aTag);
+		aTag.text(courseInfo);
+	};
+	
+	var addMsgBoxCourses = function(courseInfo){
+		var liTag = $('<li/>').appendTo('.my-courses-table');
+		liTag.addClass("table-view-cell ");
+		var aTag = $("<a/>");
+		aTag.addClass("navigate-right");
+		var span = $('<span/>').addClass('badge').html('1');
+		console.log(span);
+		liTag.append(aTag);
+		aTag.html(courseInfo);
+		aTag.append(span);
+	};
+	
+	if(localStorage.getItem('User') != undefined){
+		var usrRegisteredCourses = JSON.parse(localStorage.getItem('User')).courses;
+		console.log("User Registered Courses");
+		console.log(usrRegisteredCourses);
+	}
+	
+	if(usrRegisteredCourses != null){
+		usrRegisteredCourses.forEach(function(crsName){
+			console.log(crsName);
+			addUsrCourses(crsName);
+			addMsgBoxCourses(crsName);
+		});
+	}
+	var rmvCourses = function(){
+		var coursesUp = $(".searched-course");
+		console.log(coursesUp);
+		coursesUp.remove();
+	};
+	
 	/* Searching courses algorithm */
 	$("#search").on("keyup", function() {
 	    var value = $(this).val();
 		console.log(value);
+		rmvCourses();
 		
 		if(value != ""){
 			$.ajax({
@@ -173,7 +240,16 @@ $(document).ready(function() {
 					dataType: 'json'
 				}).done(function(courses){
 					console.log(courses);
+					var allCourses = courses.courses;
+					allCourses.forEach(function(course){
+						addCourseToPage(course.name + " " + course.title, course.description);	
+					});
+					
 				});
 		}
 	});
+	
+	var changeProfile = function(){
+		var liContents = $('.').html();
+	};
 });
