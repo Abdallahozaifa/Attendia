@@ -225,13 +225,30 @@ $(document).ready(function() {
 		coursesUp.remove();
 	};
 	
+	// if(window.location.href == "https://attendia-sweng411-real-abdallahozaifa.c9users.io/findcourses.html"){
+	// 	console.log("We Hereeeee!");
+	// 	var obj = {};
+	// 	setInterval(function(){
+	// 		console.log($('.searched-course'));
+	// 		$('.user-chosen-course').each(function(){
+	// 		    var text = $.trim($(this).text());
+	// 		    if(obj[text]){
+	// 		        $(this).remove();
+	// 		    } else {
+	// 		        obj[text] = true;
+	// 		    }
+	// 		});
+	// 	}, 200);
+	// }
+	
 	/* Searching courses algorithm */
 	$("#search").on("keyup", function() {
+		console.log("Key Up Function triggered!");
 	    var value = $(this).val();
-		console.log(value);
+		console.log("Value is: " + value);
 		rmvCourses();
 		
-		if(value != ""){
+		if(value != "" && value != " "){
 			$.ajax({
 					url: "/searchCourse",
 					type: "POST",
@@ -244,12 +261,74 @@ $(document).ready(function() {
 					allCourses.forEach(function(course){
 						addCourseToPage(course.name + " " + course.title, course.description);	
 					});
-					
+					console.log("Done Adding elements to Page!");
 				});
 		}
 	});
 	
-	var changeProfile = function(){
-		var liContents = $('.').html();
+	var mkCntEditable = function(elm){
+		var value = elm.attr('contenteditable');
+		console.log(value);
+		console.log(elm);
+	    if (value == 'false' || value == undefined) {
+	        elm.attr('contenteditable','true');
+	    }
+	    else {
+	        elm.attr('contenteditable','false');
+	    }
 	};
+	
+	var chgeBtnClr = function(elm){
+		var clsStr = elm.attr("class");
+		if(clsStr.indexOf("btn-primary") >= 0){
+			elm.text("Done");
+			elm.removeClass("btn-primary");
+			elm.addClass("btn-negative");
+		}else{
+			elm.text("Change");
+			elm.removeClass("btn-negative");
+			elm.addClass("btn-primary ");
+		}
+	};
+	
+	var changeProfile = function(){
+		var fullNmField = $(".fullname-field"), emailField = $(".email-field");
+		var usrNameField = $(".username-field"), pswdField = $(".password-field");
+		var usr = JSON.parse(localStorage.getItem("User"));
+		fullNmField.html(usr.fullName + "<button class='btn btn-primary profile-btn profile-component-fullName'>Change</button>");
+		emailField.html(usr.email + "<button class='btn btn-primary profile-btn profile-btn profile-component-email'>Change</button>");
+		usrNameField.html(usr.userName + "<button class='btn btn-primary profile-btn profile-component-username'>Change</button>");
+		pswdField.html(usr.password + "<button class='btn btn-primary profile-btn profile-component-password'>Change</button>");
+		var profileBtnFullNm = $(".profile-component-fullName");
+		var profileBtnEmail = $(".profile-component-email");
+		var profileBtnUsrNm = $(".profile-component-username");
+		var profileBtnPswd = $(".profile-component-password");
+		console.log(profileBtnFullNm);
+		profileBtnFullNm.click(function(){
+			chgeBtnClr($(this));
+			mkCntEditable($(".fullname-field"));
+		});
+		
+		profileBtnEmail.click(function(){
+			chgeBtnClr($(this));
+			mkCntEditable($(".email-field"));
+		});
+		
+		profileBtnUsrNm.click(function(){
+			chgeBtnClr($(this));
+			mkCntEditable($(".username-field"));
+		});
+		
+		profileBtnPswd.click(function(){
+			chgeBtnClr($(this));
+			mkCntEditable($(".password-field"));
+		});
+		
+	};
+	
+	if(window.location.href == "https://attendia-sweng411-real-abdallahozaifa.c9users.io/profile.html"){
+		console.log("Were on profile page!");
+		changeProfile();
+		
+	}
 });
