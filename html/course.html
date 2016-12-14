@@ -23,15 +23,19 @@
   <!-- Make sure all your bars are the first things in your <body> -->
     <header class="bar bar-nav">
       <h1 class="title">Attendia</h1>
+      <a class="icon icon-left-nav pull-left courseboard-left"></a>
     </header>
 
-    <!-- Segmented control in standard bar fixed to top -->
     <div class="content">
-
-	</div>
-
+	    <!-- Segmented control in standard bar fixed to top -->
+		<nav class="bar bar-standard">
+		  <div class="segmented-control">
+		    <a class="control-item active course selected-coursename">This Course</a>
+		  </div>
+		</nav>
+    
    <nav class="bar bar-tab">
-      <a class="tab-item active course-item">
+      <a class="tab-item course-item active">
         <span class="icon icon-home"></span>
         <span class="tab-label">Courses</span>
       </a>
@@ -53,9 +57,9 @@
       </a>
     </nav>
 
-	<!-- Block button in standard bar fixed above the footer -->
+    <!-- Block button in standard bar fixed above the footer -->
 	<div class="bar bar-standard bar-footer-secondary">
-	  <button class="btn btn-block username-display">Student</button>
+	  <button class="btn btn-block username-display"></button>
 	</div>
 
     <script src="https://code.jquery.com/jquery-3.1.1.js" integrity="sha256-16cdPddA6VdVInumRGo6IbivbERE8p7CQR3HzTBuELA=" crossorigin="anonymous"></script>

@@ -8,7 +8,9 @@ $(document).ready(function() {
 	var signInBtn = $(".signin-btn");
 	var studentBtn = $(".student-btn");
 	var professorBtn = $(".professor-btn");
-	var leftArrowBtn = $(".pull-left");
+	var leftArrowBtn = $(".appstart-left");
+	var msgLeftArrowBtn = $(".messageboard-left");
+	var crsLeftArrowBtn = $(".courseboard-left");
 	var fullName = $(".full-name");
 	var email = $(".email");
 	var userName = $(".username");
@@ -23,6 +25,7 @@ $(document).ready(function() {
 	var myCoursesItem = $(".mycourses-item");
 	var findCoursesItem = $(".findcourses-item");
 	var logOutItem = $(".logout-item");
+	var selectedCrsNmField = $(".selected-coursename");
 	var UserFetched, identity = null;
 
 	/****************************************
@@ -56,6 +59,20 @@ $(document).ready(function() {
 	if (leftArrowBtn != null) {
 		leftArrowBtn.click(function() {
 			window.location.href = "index.html";
+		});
+	}
+	
+	// User clicks left navigation arrow
+	if (msgLeftArrowBtn != null) {
+		msgLeftArrowBtn.click(function() {
+			window.location.href = "messageboard.html";
+		});
+	}
+	
+	// User clicks left navigation arrow
+	if (crsLeftArrowBtn != null) {
+		crsLeftArrowBtn.click(function() {
+			window.location.href = "courses.html";
 		});
 	}
 	
@@ -101,10 +118,14 @@ $(document).ready(function() {
 	if (logOutItem != null) {
 		logOutItem.click(function() {
 			localStorage.setItem("User", null);
+			localStorage.setItem("selected-course", null);
 			window.location.href = "index.html";
 		});
 	}
 	
+	if (selectedCrsNmField != null) {
+		selectedCrsNmField.text(localStorage.getItem("selected-course"));
+	}
 	
 	/**************************************************
 	*   User submits form on Log In page/Sign Up Page *
@@ -216,7 +237,7 @@ $(document).ready(function() {
 		var liTag = $('<li/>').appendTo('.courses-table');
 		liTag.addClass("table-view-cell user-chosen-course");
 		var aTag = $("<a/>");
-		aTag.addClass("navigate-right");
+		aTag.addClass("navigate-right course-page");
 		liTag.append(aTag);
 		aTag.text(courseInfo);
 	};
@@ -229,7 +250,7 @@ $(document).ready(function() {
 		var liTag = $('<li/>').appendTo('.my-courses-table');
 		liTag.addClass("table-view-cell ");
 		var aTag = $("<a/>");
-		aTag.addClass("navigate-right");
+		aTag.addClass("navigate-right messageboard-arrow");
 		var span = $('<span/>').addClass('badge').html('1');
 		liTag.append(aTag);
 		aTag.html(courseInfo);
@@ -390,6 +411,22 @@ $(document).ready(function() {
 				addUsrCourses(crsName);
 				addMsgBoxCourses(crsName);
 			});
+			
+			var messageBoardArrow = $(".messageboard-arrow");
+			if (messageBoardArrow != null) {
+				messageBoardArrow.click(function() {
+					window.location.href = "messages.html";
+				});
+			}
+			
+			var courseBoardArrow = $(".course-page");
+			if (courseBoardArrow != null) {
+				courseBoardArrow.click(function() {
+					console.log($(this).text());
+					localStorage.setItem("selected-course", $(this).text());
+					window.location.href = "course.html";
+				});
+			}
 		}
 	}
 	
