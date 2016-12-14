@@ -22,27 +22,8 @@ $(document).ready(function() {
 	var usrObjFrmStorage = localStorage.getItem('User');
 	var myCoursesItem = $(".mycourses-item");
 	var findCoursesItem = $(".findcourses-item");
+	var logOutItem = $(".logout-item");
 	var UserFetched, identity = null;
-	
-	
-	// Retrieve the User object from storage
-	if(usrObjFrmStorage != "undefined"){
-		UserFetched = JSON.parse(usrObjFrmStorage);
-		console.log(UserFetched);
-		if(userNameDisplay != null){
-			userNameDisplay.text("Welcome " + UserFetched.userName + "!");	
-		}
-		
-		var usrRegisteredCourses = JSON.parse(usrObjFrmStorage).courses;
-		if(usrRegisteredCourses != null){
-			usrRegisteredCourses.forEach(function(crsName){
-				console.log(crsName);
-				addUsrCourses(crsName);
-				addMsgBoxCourses(crsName);
-			});
-		}
-	}
-
 
 	/****************************************
 	*      Click Handlers for Components    *
@@ -117,6 +98,13 @@ $(document).ready(function() {
 		});
 	}
 	
+	if (logOutItem != null) {
+		logOutItem.click(function() {
+			localStorage.setItem("User", null);
+			window.location.href = "index.html";
+		});
+	}
+	
 	
 	/**************************************************
 	*   User submits form on Log In page/Sign Up Page *
@@ -144,6 +132,9 @@ $(document).ready(function() {
 				// Server Response 
 				console.log(result);
 				
+				// Save the User object to Local Storage 
+				localStorage.setItem('User', JSON.stringify(result.user));
+					
 				// User does not exist!
 				if(result.response == 'User does not exists!'){
 					var pageCont = $(".content");
@@ -165,18 +156,12 @@ $(document).ready(function() {
 					
 				// User exists!
 				}else if(result.response == 'User exists!'){
-					// Save the User object to Local Storage 
-					localStorage.setItem('User', JSON.stringify(result.userObj));
-					
 					// Information is validated, goes to dashboard
 					window.location.href = "courses.html";
 				}
 				
 				// User is Signing Up
 				else if(result.response == 'User successfully signed up!'){
-					// Save the User object to Local Storage 
-					localStorage.setItem('User', JSON.stringify(result.userObj));
-					
 					// Information is validated, goes to dashboard
 					window.location.href = "courses.html";
 				}
@@ -199,11 +184,22 @@ $(document).ready(function() {
 			this.closest("li").remove();
 			var classCont = $(this).children().html();
 			classCont = classCont.substring(0, classCont.indexOf('<'));
-			var usrGot = JSON.parse(usrObjFrmStorage);
+			var usrGot = JSON.parse(localStorage.getItem("User"));
 			usrGot.courses.push(classCont);
 			localStorage.setItem('User', JSON.stringify(usrGot));
+			console.log(JSON.parse(localStorage.getItem("User")));
 			
-			console.log(JSON.parse(usrObjFrmStorage));
+			// Updates the user due to the new courses
+			$.ajax({
+				url: "/updateuser",
+				type: "POST",
+				data: JSON.stringify(usrGot),
+				contentType: "application/json",
+				dataType: 'json'
+			}).done(function(result){
+				console.log(result);
+			});
+			
 		});
 		var courseDiv = $("<div>", {"class": "media-body"});
 		liTag.append(aTag);
@@ -235,7 +231,6 @@ $(document).ready(function() {
 		var aTag = $("<a/>");
 		aTag.addClass("navigate-right");
 		var span = $('<span/>').addClass('badge').html('1');
-		console.log(span);
 		liTag.append(aTag);
 		aTag.html(courseInfo);
 		aTag.append(span);
@@ -247,36 +242,16 @@ $(document).ready(function() {
 	******************************************************/
 	var rmvCourses = function(){
 		var coursesUp = $(".searched-course");
-		console.log(coursesUp);
 		coursesUp.remove();
 	};
-	
-	// if(window.location.href == "https://attendia-sweng411-real-abdallahozaifa.c9users.io/findcourses.html"){
-	// 	console.log("We Hereeeee!");
-	// 	var obj = {};
-	// 	setInterval(function(){
-	// 		console.log($('.searched-course'));
-	// 		$('.user-chosen-course').each(function(){
-	// 		    var text = $.trim($(this).text());
-	// 		    if(obj[text]){
-	// 		        $(this).remove();
-	// 		    } else {
-	// 		        obj[text] = true;
-	// 		    }
-	// 		});
-	// 	}, 200);
-	// }
-	
-	
+
 	/*******************************
 	*  Searching Courses Algorithm *
 	*******************************/
 	$("#search").on("keyup", function() {
-		console.log("Key Up Function triggered!");
+		//console.log("Key Up Function triggered!");
 	    var value = $(this).val();
-		console.log("Value is: " + value);
-		rmvCourses();
-		
+	    
 		if(value != "" && value != " "){
 			$.ajax({
 					url: "/searchCourse",
@@ -285,12 +260,11 @@ $(document).ready(function() {
 					contentType: "application/json",
 					dataType: 'json'
 				}).done(function(courses){
-					console.log(courses);
+					rmvCourses();
 					var allCourses = courses.courses;
 					allCourses.forEach(function(course){
 						addCourseToPage(course.name + " " + course.title, course.description);	
 					});
-					console.log("Done Adding elements to Page!");
 				});
 		}
 	});
@@ -301,8 +275,6 @@ $(document).ready(function() {
 	***************************************************/
 	var mkCntEditable = function(elm){
 		var value = elm.attr('contenteditable');
-		console.log(value);
-		console.log(elm);
 	    if (value == 'false' || value == undefined) {
 	        elm.attr('contenteditable','true');
 	    }
@@ -328,6 +300,33 @@ $(document).ready(function() {
 		}
 	};
 	
+	/**************************************************
+	*  Records the edit change for the profile page   *
+	***************************************************/
+	var recordEditChange = function(field, objAtr){
+		var usrNmHtml = field.html();
+		var contents = usrNmHtml.substring(0, usrNmHtml.indexOf('<'));
+		field.blur(function() {
+			var cntHtml = $(this).html();
+			cntHtml = cntHtml.substring(0, cntHtml.indexOf('<'));
+		    if (contents !=  cntHtml){
+		        contents = cntHtml;
+		        var usrObj = JSON.parse(localStorage.getItem('User'));
+		        usrObj[objAtr] = contents;
+		        localStorage.setItem("User", JSON.stringify(usrObj));
+		        
+		    	$.ajax({
+					url: "/updateuser",
+					type: "POST",
+					data: JSON.stringify(usrObj),
+					contentType: "application/json",
+					dataType: 'json'
+				}).done(function(result){
+					console.log(result);
+				});   
+		    }
+		});
+	};
 	
 	/**************************************************
 	*  Changing profile section according to user     *
@@ -335,7 +334,7 @@ $(document).ready(function() {
 	var changeProfile = function(){
 		var fullNmField = $(".fullname-field"), emailField = $(".email-field");
 		var usrNameField = $(".username-field"), pswdField = $(".password-field");
-		var usr = JSON.parse(localStorage.getItem("User"));
+		var usr = JSON.parse(usrObjFrmStorage);
 		fullNmField.html(usr.fullName + "<button class='btn btn-primary profile-btn profile-component-fullName'>Change</button>");
 		emailField.html(usr.email + "<button class='btn btn-primary profile-btn profile-btn profile-component-email'>Change</button>");
 		usrNameField.html(usr.userName + "<button class='btn btn-primary profile-btn profile-component-username'>Change</button>");
@@ -344,33 +343,55 @@ $(document).ready(function() {
 		var profileBtnEmail = $(".profile-component-email");
 		var profileBtnUsrNm = $(".profile-component-username");
 		var profileBtnPswd = $(".profile-component-password");
-		console.log(profileBtnFullNm);
 		
 		/*********************************
 		*  Profile Button Click Handlers *
 		**********************************/
 		profileBtnFullNm.click(function(){
+			var flNmField = $(".fullname-field");
 			chgeBtnClr($(this));
-			mkCntEditable($(".fullname-field"));
+			mkCntEditable(flNmField);
+			recordEditChange(flNmField, "fullName");
 		});
 		
 		profileBtnEmail.click(function(){
+			var emlField = $(".email-field");
 			chgeBtnClr($(this));
-			mkCntEditable($(".email-field"));
+			mkCntEditable(emlField);
+			recordEditChange(emlField, "email");
 		});
 		
 		profileBtnUsrNm.click(function(){
+			var usrNmField = $(".username-field");
 			chgeBtnClr($(this));
-			mkCntEditable($(".username-field"));
+			mkCntEditable(usrNmField);
+			recordEditChange(usrNmField, "userName");
 		});
 		
 		profileBtnPswd.click(function(){
+			var pswdField = $(".password-field");
 			chgeBtnClr($(this));
-			mkCntEditable($(".password-field"));
+			mkCntEditable(pswdField);
+			recordEditChange(pswdField, "password");
 		});
 		
 	};
 	
+	// Retrieve the User object from storage
+	if(usrObjFrmStorage != "undefined" && usrObjFrmStorage != null && usrObjFrmStorage != "null"){
+		UserFetched = JSON.parse(usrObjFrmStorage);
+		if(userNameDisplay != null){
+			userNameDisplay.text("Welcome " + UserFetched.userName + "!");	
+		}
+		
+		var usrRegisteredCourses = JSON.parse(usrObjFrmStorage).courses;
+		if(usrRegisteredCourses != null){
+			usrRegisteredCourses.forEach(function(crsName){
+				addUsrCourses(crsName);
+				addMsgBoxCourses(crsName);
+			});
+		}
+	}
 	
 	/*****************************************
 	*  Detects if user is on profile page	 *

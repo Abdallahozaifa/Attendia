@@ -5,22 +5,10 @@ var app = express();
 var bodyParser = require("body-parser");
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
-var User = require('./User');
+var User = require('./server_modules/User');
 var url = 'mongodb://localhost:27017/attendia';
 var ObjectId = require('mongodb').ObjectID;
-var Course = require("./Course");
-
-var kelly = {
-      _id: ObjectId(),
-      name: { first: "Kelly", last: "Johnson" },
-      email: "Abdallahozaifa19527@gmail.com",
-      password: "hozaifa"
-};
-
-var userSearch = {
-    name: {first: "Kelly", last: "Johnson"}
-};
-
+var Course = require("./server_modules/Course");
 
 /* Serving static files in express */
 app.use(express.static('html'));
@@ -44,6 +32,7 @@ app.get('/index.html', function(req, res) {
     });
 });
 
+// Post request handler for searching courses from the database 
 app.post('/searchCourse', function(req, res) {
     var searchString = req.body.searchStr;
     var courseMatch = [];
@@ -90,7 +79,7 @@ app.post('/searchCourse', function(req, res) {
     });
 });
 
-
+// Post request handler for searching users from the database 
 app.post('/userinfo', function(req, res){
    var user = req.body;
 
@@ -141,14 +130,42 @@ app.post('/userinfo', function(req, res){
           User.insertUser(db, user, function(){
               console.log(user.fullName + " was successfully Added to the database!");
               //console.log(user);
+              res.send({response: "User successfully signed up!", user: user});
           });
         });
         
         console.dir(user);
-        res.send({response: "User successfully signed up!", userObj: user});
    }
 });
 
+
+// Post request handler for updating users from the database 
+app.post('/updateuser', function(req, res){
+    var user = req.body;
+
+    // Connecting to Mongo Database Server and searching for user
+       MongoClient.connect(url, function(err, db) {
+          assert.equal(null, err);
+          console.log("Connected correctly to server.");
+          
+          var newUsrObj = {
+              fullName: user.fullName,
+              email: user.email,
+              userName: user.userName,
+              password: user.password,
+              courses: user.courses
+          };
+          
+          // Updates the user
+          User.updateUser(db, ObjectId(user["_id"]).valueOf(), newUsrObj, function(err, status){
+              assert.equal(null, err);
+              if(status.result.nModified == 1){
+                res.send({response: "User Updated Successfully!"});
+              }
+          });
+
+       });
+});
 
 /* Listens on the Server Port */
 var server = app.listen(process.env.PORT || '8080', '0.0.0.0', function() {
