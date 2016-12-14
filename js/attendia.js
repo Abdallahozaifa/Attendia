@@ -1,13 +1,10 @@
 /* global $, User, localStorage*/
 $(document).ready(function() {
 	console.log("Attendia JS Loaded!!");
-	
-	// Retrieve the object from storage
-	if(localStorage.getItem('User') != undefined){
-		var UserFetched = JSON.parse(localStorage.getItem('User'));
-	}
-	
-	// Front Page Components
+
+	/****************************************
+	*          Front Page Components        *
+	****************************************/
 	var signInBtn = $(".signin-btn");
 	var studentBtn = $(".student-btn");
 	var professorBtn = $(".professor-btn");
@@ -21,45 +18,113 @@ $(document).ready(function() {
 	var profileItem = $(".profile-item");
 	var messageBoardItem = $(".messageboard-item");
 	var calendarItem = $(".calendar-item");
-	var identity = null;
 	var userNameDisplay = $(".username-display");
+	var usrObjFrmStorage = localStorage.getItem('User');
+	var myCoursesItem = $(".mycourses-item");
+	var findCoursesItem = $(".findcourses-item");
+	var UserFetched, identity = null;
 	
-	if(UserFetched != null){
+	
+	// Retrieve the User object from storage
+	if(usrObjFrmStorage != "undefined"){
+		UserFetched = JSON.parse(usrObjFrmStorage);
+		console.log(UserFetched);
 		if(userNameDisplay != null){
 			userNameDisplay.text("Welcome " + UserFetched.userName + "!");	
 		}
+		
+		var usrRegisteredCourses = JSON.parse(usrObjFrmStorage).courses;
+		if(usrRegisteredCourses != null){
+			usrRegisteredCourses.forEach(function(crsName){
+				console.log(crsName);
+				addUsrCourses(crsName);
+				addMsgBoxCourses(crsName);
+			});
+		}
 	}
 
-	if(UserFetched != null){
-		console.log(UserFetched);
+
+	/****************************************
+	*      Click Handlers for Components    *
+	****************************************/   
+	
+	if(signInBtn != null){
+		// User clicks sign in page on index page
+		signInBtn.click(function() {
+			window.location.href = "signin.html";
+		});
 	}
 	
-	// Click Handlers for components    
-	signInBtn.click(function() {
-		window.location.href = "signin.html";
-	});
+	if(studentBtn != null){
+		// User clicks Student on index page
+		studentBtn.click(function() {
+			window.location.href = "signup.html";
+			identity = "student";
+		});
+	}
+	
+	if(professorBtn != null){
+		// User clicks Professor on index page
+		professorBtn.click(function() {
+			window.location.href = "signup.html";
+			identity = "professor";
+		});
+	}
 
-	studentBtn.click(function() {
-		window.location.href = "signup.html";
-		identity = "student";
-	});
-
-	professorBtn.click(function() {
-		window.location.href = "signup.html";
-		identity = "professor";
-	});
-
-
+	// User clicks left navigation arrow
 	if (leftArrowBtn != null) {
 		leftArrowBtn.click(function() {
 			window.location.href = "index.html";
 		});
 	}
+	
+	// User clicks course navigation button 
+	if (courseItem != null) {
+		courseItem.click(function() {
+			window.location.href = "courses.html";
+		});
+	}
+	
+	// User clicks profile navigation button
+	if (profileItem != null) {
+		profileItem.click(function() {
+			window.location.href = "profile.html";
+		});
+	}
+	
+	// User clicks message board navigation button
+	if (messageBoardItem != null) {
+		messageBoardItem.click(function() {
+			window.location.href = "messageboard.html";
+		});
+	}
 
-	// User submits form on Log In page or Sign Up Page
+	if (calendarItem != null) {
+		calendarItem.click(function() {
+			window.location.href = "calendar.html";
+		});
+	}
+
+	if (myCoursesItem != null) {
+		myCoursesItem.click(function() {
+			window.location.href = "courses.html";
+		});
+	}
+
+	if (findCoursesItem != null) {
+		findCoursesItem.click(function() {
+			window.location.href = "findcourses.html";
+		});
+	}
+	
+	
+	/**************************************************
+	*   User submits form on Log In page/Sign Up Page *
+	***************************************************/ 
 	if (submitBtn != null) {
 		submitBtn.click(function() {
-
+			
+			// User object that is sent to server 
 			var user = {
 				fullName: fullName.val(),
 				email: email.val(),
@@ -67,14 +132,7 @@ $(document).ready(function() {
 				password: password.val()
 			};
 			
-			User.setName(user.fullName);
-			User.setEmail(user.email);
-			User.setUserName(user.userName);
-			
-			console.log(User.getName());
-			console.log(User.getEmail());
-			console.log(User.getUserName());
-			
+			// Sends over user object to server 
 			$.ajax({
 				url: "/userinfo",
 				type: "POST",
@@ -82,10 +140,9 @@ $(document).ready(function() {
 				contentType: "application/json",
 				dataType: 'json'
 			}).done(function(result){
-				console.log(result.response);
-				console.log(result);
 				
-				localStorage.setItem('User', JSON.stringify(result.userObj));
+				// Server Response 
+				console.log(result);
 				
 				// User does not exist!
 				if(result.response == 'User does not exists!'){
@@ -106,15 +163,20 @@ $(document).ready(function() {
 					}, 3000);
 					
 					
-				
 				// User exists!
 				}else if(result.response == 'User exists!'){
+					// Save the User object to Local Storage 
+					localStorage.setItem('User', JSON.stringify(result.userObj));
+					
 					// Information is validated, goes to dashboard
 					window.location.href = "courses.html";
 				}
 				
 				// User is Signing Up
 				else if(result.response == 'User successfully signed up!'){
+					// Save the User object to Local Storage 
+					localStorage.setItem('User', JSON.stringify(result.userObj));
+					
 					// Information is validated, goes to dashboard
 					window.location.href = "courses.html";
 				}
@@ -124,44 +186,10 @@ $(document).ready(function() {
 		});
 	}
 
-	if (courseItem != null) {
-		courseItem.click(function() {
-			window.location.href = "courses.html";
-		});
-	}
 
-	if (profileItem != null) {
-		profileItem.click(function() {
-			window.location.href = "profile.html";
-		});
-	}
-
-	if (messageBoardItem != null) {
-		messageBoardItem.click(function() {
-			window.location.href = "messageboard.html";
-		});
-	}
-
-	if (calendarItem != null) {
-		calendarItem.click(function() {
-			window.location.href = "calendar.html";
-		});
-	}
-
-	var myCoursesItem = $(".mycourses-item");
-	var findCoursesItem = $(".findcourses-item");
-	if (myCoursesItem != null) {
-		myCoursesItem.click(function() {
-			window.location.href = "courses.html";
-		});
-	}
-
-	if (findCoursesItem != null) {
-		findCoursesItem.click(function() {
-			window.location.href = "findcourses.html";
-		});
-	}
-	
+	/**************************************************
+	*  Add Courses to the users findcourses.html page *
+	***************************************************/ 	
 	var addCourseToPage = function(title, description){
 		var liTag = $('<li/>').appendTo('.classes-section');
 		liTag.addClass("table-view-cell media searched-course");
@@ -171,20 +199,23 @@ $(document).ready(function() {
 			this.closest("li").remove();
 			var classCont = $(this).children().html();
 			classCont = classCont.substring(0, classCont.indexOf('<'));
-			var usrGot = JSON.parse(localStorage.getItem('User'));
+			var usrGot = JSON.parse(usrObjFrmStorage);
 			usrGot.courses.push(classCont);
 			localStorage.setItem('User', JSON.stringify(usrGot));
 			
-			console.log(JSON.parse(localStorage.getItem('User')));
+			console.log(JSON.parse(usrObjFrmStorage));
 		});
 		var courseDiv = $("<div>", {"class": "media-body"});
-		
 		liTag.append(aTag);
 		aTag.append(courseDiv);
 		courseDiv.text(title);
 		courseDiv.append("<p>" + description + "</p>");
 	};
 	
+	
+	/**************************************************
+	*  Add Courses to the users courses.html page *
+	***************************************************/
 	var addUsrCourses = function(courseInfo){
 		var liTag = $('<li/>').appendTo('.courses-table');
 		liTag.addClass("table-view-cell user-chosen-course");
@@ -194,6 +225,10 @@ $(document).ready(function() {
 		aTag.text(courseInfo);
 	};
 	
+	
+	/**************************************************
+	*  Add Courses to the users messageboard.html page *
+	***************************************************/
 	var addMsgBoxCourses = function(courseInfo){
 		var liTag = $('<li/>').appendTo('.my-courses-table');
 		liTag.addClass("table-view-cell ");
@@ -205,20 +240,11 @@ $(document).ready(function() {
 		aTag.html(courseInfo);
 		aTag.append(span);
 	};
-	
-	if(localStorage.getItem('User') != undefined){
-		var usrRegisteredCourses = JSON.parse(localStorage.getItem('User')).courses;
-		console.log("User Registered Courses");
-		console.log(usrRegisteredCourses);
-	}
-	
-	if(usrRegisteredCourses != null){
-		usrRegisteredCourses.forEach(function(crsName){
-			console.log(crsName);
-			addUsrCourses(crsName);
-			addMsgBoxCourses(crsName);
-		});
-	}
+
+
+	/*****************************************************
+	*  Remove Courses on findcourses.hmtl for duplicates *
+	******************************************************/
 	var rmvCourses = function(){
 		var coursesUp = $(".searched-course");
 		console.log(coursesUp);
@@ -241,7 +267,10 @@ $(document).ready(function() {
 	// 	}, 200);
 	// }
 	
-	/* Searching courses algorithm */
+	
+	/*******************************
+	*  Searching Courses Algorithm *
+	*******************************/
 	$("#search").on("keyup", function() {
 		console.log("Key Up Function triggered!");
 	    var value = $(this).val();
@@ -266,6 +295,10 @@ $(document).ready(function() {
 		}
 	});
 	
+	
+	/**************************************************
+	*  Making Content Editable on profile.html page   *
+	***************************************************/
 	var mkCntEditable = function(elm){
 		var value = elm.attr('contenteditable');
 		console.log(value);
@@ -278,6 +311,10 @@ $(document).ready(function() {
 	    }
 	};
 	
+	
+	/**************************************************
+	*	Change Button Color on profile.html page      *
+	***************************************************/
 	var chgeBtnClr = function(elm){
 		var clsStr = elm.attr("class");
 		if(clsStr.indexOf("btn-primary") >= 0){
@@ -291,6 +328,10 @@ $(document).ready(function() {
 		}
 	};
 	
+	
+	/**************************************************
+	*  Changing profile section according to user     *
+	***************************************************/
 	var changeProfile = function(){
 		var fullNmField = $(".fullname-field"), emailField = $(".email-field");
 		var usrNameField = $(".username-field"), pswdField = $(".password-field");
@@ -304,6 +345,10 @@ $(document).ready(function() {
 		var profileBtnUsrNm = $(".profile-component-username");
 		var profileBtnPswd = $(".profile-component-password");
 		console.log(profileBtnFullNm);
+		
+		/*********************************
+		*  Profile Button Click Handlers *
+		**********************************/
 		profileBtnFullNm.click(function(){
 			chgeBtnClr($(this));
 			mkCntEditable($(".fullname-field"));
@@ -326,9 +371,13 @@ $(document).ready(function() {
 		
 	};
 	
+	
+	/*****************************************
+	*  Detects if user is on profile page	 *
+	******************************************/
 	if(window.location.href == "https://attendia-sweng411-real-abdallahozaifa.c9users.io/profile.html"){
 		console.log("Were on profile page!");
 		changeProfile();
-		
 	}
+	
 });

@@ -20,6 +20,11 @@
 
     };
     
+    var removeAllUsers = function(db) {
+        db.collection('users').remove({});
+    };
+    
     exports.insertUser = insertUser;
     exports.findUser = findUser;
+    exports.removeAllUsers = removeAllUsers;
 }).call(this);

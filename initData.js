@@ -3,6 +3,7 @@ var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var url = 'mongodb://localhost:27017/attendia';
 var ObjectId = require('mongodb').ObjectID;
+var User = require("./User");
 
 var Math41 = {
       _id: ObjectId(),
@@ -70,46 +71,47 @@ MongoClient.connect(url, function(err, db) {
     //     console.log(course);
     // });
     
-    var searchString = "c";
-    var courseNames = [], courses = [];
-    var courseMatch = [], courseHit = [];
+    // var searchString = "c";
+    // var courseNames = [], courses = [];
+    // var courseMatch = [], courseHit = [];
     
-    // Finds all the courses 
-    Course.findAllCourses(db, function(course){
-        // pushes all the courses to an array
-        courseNames.push(course.name);
-        courses.push(course);
-        var courseCount = 0;
+    // // Finds all the courses 
+    // Course.findAllCourses(db, function(course){
+    //     // pushes all the courses to an array
+    //     courseNames.push(course.name);
+    //     courses.push(course);
+    //     var courseCount = 0;
         
-        // Iterates through each course to search for a match
-        courseNames.forEach(function(courseName){
-          var courseChar = courseName.substr(0, searchString.length);
-          if(courseChar === searchString.toUpperCase()){
-              courseHit.push(courseCount);
-          }
+    //     // Iterates through each course to search for a match
+    //     courseNames.forEach(function(courseName){
+    //       var courseChar = courseName.substr(0, searchString.length);
+    //       if(courseChar === searchString.toUpperCase()){
+    //           courseHit.push(courseCount);
+    //       }
           
-          courseCount++;
-        });
+    //       courseCount++;
+    //     });
         
-    });
+    // });
    
-    setTimeout(function(){
-        //console.log(courses);
-        courseHit = courseHit.filter(function(item, index, inputArray) {
-           return inputArray.indexOf(item) == index;
-        });
-        console.log(courseHit);
-        courseHit.forEach(function(index){
-            //console.log("Index is " + index);
-            courseMatch.push(courses[index]);
-        });
+    // setTimeout(function(){
+    //     //console.log(courses);
+    //     courseHit = courseHit.filter(function(item, index, inputArray) {
+    //       return inputArray.indexOf(item) == index;
+    //     });
+    //     console.log(courseHit);
+    //     courseHit.forEach(function(index){
+    //         //console.log("Index is " + index);
+    //         courseMatch.push(courses[index]);
+    //     });
         
-        console.log(courseMatch);
-    }, 1000);
+    //     console.log(courseMatch);
+    // }, 1000);
     
 //   Course.findAllCourses(db, function(course){
 //       console.log(course);
 //   });
     // Course.removeAllCourses(db);
+    User.removeAllUsers(db);
     db.close();
 });
