@@ -284,6 +284,9 @@ $(document).ready(function() {
 		var liTag = $('<li/>').appendTo('.messages-section');
 		liTag.addClass("table-view-cell media");
 		var aTag = $("<a/>");
+		var img = $('<img class="media-object pull-left">'); 
+		img.attr('src', "http://placehold.it/42x42");
+		img.appendTo(aTag);
 		var courseDiv = $("<div>", {"class": "media-body"});
 		liTag.append(aTag);
 		aTag.append(courseDiv);
@@ -308,14 +311,35 @@ $(document).ready(function() {
 	*  Add Courses to the users messageboard.html page *
 	***************************************************/
 	var addMsgBoxCourses = function(courseInfo, numOfMessages){
+		var slctedCrs = courseInfo;
+		var wrdArr = slctedCrs.split(" ");
+		var clsNm = wrdArr[0] + " " + wrdArr[1];
 		var liTag = $('<li/>').appendTo('.my-courses-table');
 		liTag.addClass("table-view-cell ");
 		var aTag = $("<a/>");
 		aTag.addClass("navigate-right messageboard-arrow");
-		var span = $('<span/>').addClass('badge').html(numOfMessages);
+		var span = $('<span/>').addClass('badge').html(0);
 		liTag.append(aTag);
 		aTag.html(courseInfo);
 		aTag.append(span);
+			
+		$.ajax({
+			url: "/findCourse",
+			type: "POST",
+			data: JSON.stringify({courseName: clsNm}),
+			contentType: "application/json",
+			dataType: 'json'
+		}).done(function(course){
+			var span = $('<span/>').addClass('badge').html(course.courseObj.messages.length);
+			liTag.append(aTag);
+			aTag.html(courseInfo);
+			aTag.append(span);
+		});
+		
+		// var span = $('<span/>').addClass('badge').html(0);
+		// liTag.append(aTag);
+		// aTag.html(courseInfo);
+		// aTag.append(span);
 	};
 
 

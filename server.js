@@ -74,6 +74,7 @@ app.post('/searchCourse', function(req, res) {
             
             console.log(courseMatch);
             res.send({courses: courseMatch});
+            db.close();
         }, 1000);
         
     });
@@ -103,12 +104,14 @@ app.post('/userinfo', function(req, res){
               if(user != null){
                   console.log("User exists!");
                   res.send({response: "User exists!", user: user});
+                  db.close();
               }
               
               // User entered incorrect credentials
               else{
                   console.log("User does not exists!");
                   res.send({response: "User does not exists!", user: user});
+                  db.close();
               }
               
               db.close();
@@ -131,6 +134,7 @@ app.post('/userinfo', function(req, res){
               console.log(user.fullName + " was successfully Added to the database!");
               //console.log(user);
               res.send({response: "User successfully signed up!", user: user});
+              db.close();
           });
         });
         
@@ -161,6 +165,7 @@ app.post('/updateuser', function(req, res){
               assert.equal(null, err);
               if(status.result.nModified == 1){
                 res.send({response: "User Updated Successfully!"});
+                db.close();
               }
           });
 
@@ -185,6 +190,7 @@ app.post('/postCourseMessage', function(req, res){
               newUpdatedCrs.messages.push(msgObj);
               Course.updateCourse(db, msg.courseName, newUpdatedCrs, function(){
                     res.send({response: "Course Message Added Successfully!"});
+                    db.close();
               });
           });
           
@@ -200,6 +206,7 @@ app.post('/getcoursemessages', function(req, res) {
         assert.equal(null, err);
         Course.findCourse(db, courseName, function(course){
             res.send({messages: course.messages});
+            db.close();
         });
     });
 });
@@ -213,6 +220,7 @@ app.post('/findCourse', function(req, res) {
         assert.equal(null, err);
         Course.findCourse(db, courseName, function(course){
             res.send({courseObj: course});
+            db.close();
         });
     });
 });
