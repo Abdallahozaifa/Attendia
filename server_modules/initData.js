@@ -57,29 +57,29 @@ MongoClient.connect(url, function(err, db) {
     assert.equal(null, err);
     console.log("Connected correctly to server.");
 
-    // Course.insertCourse(db, Math41, function(){
-    //       console.log(Math41.name + " was successfully Added to the database!");
-    // });
+    Course.insertCourse(db, Math41, function(){
+          console.log(Math41.name + " was successfully Added to the database!");
+    });
 
-    // Course.insertCourse(db, Math110, function(){
-    //       console.log(Math110.name + " was successfully Added to the database!");
-    // });
+    Course.insertCourse(db, Math110, function(){
+          console.log(Math110.name + " was successfully Added to the database!");
+    });
 
-    // Course.insertCourse(db, Math141, function(){
-    //       console.log(Math141.name + " was successfully Added to the database!");
-    // });
+    Course.insertCourse(db, Math141, function(){
+          console.log(Math141.name + " was successfully Added to the database!");
+    });
 
-    // Course.insertCourse(db, CMPSC122, function(){
-    //       console.log(CMPSC122.name + " was successfully Added to the database!");
-    // });
+    Course.insertCourse(db, CMPSC122, function(){
+          console.log(CMPSC122.name + " was successfully Added to the database!");
+    });
 
-    // Course.insertCourse(db, CHEM112, function(){
-    //       console.log(CHEM112.name + " was successfully Added to the database!");
-    // });
+    Course.insertCourse(db, CHEM112, function(){
+          console.log(CHEM112.name + " was successfully Added to the database!");
+    });
 
-    // Course.findCourse(db, {name: "MATH 41"}, function(course){
-    //     console.log(course);
-    // });
+    Course.findCourse(db, {name: "MATH 41"}, function(course){
+        console.log(course);
+    });
 
     // var searchString = "c";
     // var courseNames = [], courses = [];
@@ -122,15 +122,15 @@ MongoClient.connect(url, function(err, db) {
     //       console.log(course);
     //   });
     // Course.removeAllCourses(db);
-    //User.removeAllUsers(db);
+    // User.removeAllUsers(db);
     //User.removeUser(db, ObjectId("585101bf6152379a2d39c681").valueOf());
     // User.updateUser(db, ObjectId("585102b3b70f91f72d8924e4").valueOf(), {fullName: "Replaced Again Son!"}, function(){
         
     // });
     
-    // User.findAllUsers(db, function(user) {
-    //     console.log(user);
-    // });
+    User.findAllUsers(db, function(user) {
+        console.log(user);
+    });
     var crs =   {
         name: 'MATH 141',
         title: 'Calculus with Analytic Geometry II ',
@@ -143,8 +143,8 @@ MongoClient.connect(url, function(err, db) {
        
     // });
     
-    Course.findAllCourses(db, function(course){
-        console.log(course);
-    });
+    // Course.findAllCourses(db, function(course){
+    //     console.log(course);
+    // });
     // db.close();
 });

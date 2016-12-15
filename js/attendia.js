@@ -1,6 +1,5 @@
 /* global $, User, localStorage*/
 $(document).ready(function() {
-	console.log("Attendia JS Loaded!!");
 
 	/****************************************
 	*          Front Page Components        *
@@ -44,19 +43,16 @@ $(document).ready(function() {
 			window.location.href = "signin.html";
 		});
 	}
-	
-	console.log(atndBtn);
+
 	if(atndBtn != null){
 		atndBtn.attr('href','#attendanceBtn');
-		//$(".pop-upmenu").hide();
-		console.log();
+		var xAtdBtn = $(".close-attendancemessage");
 	}
 
 	if(postMsgBtn != null){
 		// User clicks sign in page on index page
 		postMsgBtn.click(function() {
 			if(txtAreaMessage != null && txtAreaMessage != ""){
-				console.log(txtAreaMessage.val());
 				var slctedCrs = localStorage.getItem("selected-course");
 				var stdName = JSON.parse(localStorage.getItem('User')).fullName;
 				var msg = {
@@ -64,9 +60,7 @@ $(document).ready(function() {
 					courseMessage: txtAreaMessage.val(),
 					studentName: stdName
 				};
-				
-				console.log(msg);
-				
+
 				$.ajax({
 					url: "/postCourseMessage",
 					type: "POST",
@@ -74,7 +68,6 @@ $(document).ready(function() {
 					contentType: "application/json",
 					dataType: 'json'
 				}).done(function(result){
-					console.log(result);
 				});
 			}
 			
@@ -207,9 +200,6 @@ $(document).ready(function() {
 				dataType: 'json'
 			}).done(function(result){
 				
-				// Server Response 
-				console.log(result);
-				
 				// Save the User object to Local Storage 
 				localStorage.setItem('User', JSON.stringify(result.user));
 					
@@ -253,32 +243,33 @@ $(document).ready(function() {
 	/**************************************************
 	*  Add Courses to the users findcourses.html page *
 	***************************************************/ 	
-	var addCourseToPage = function(title, description, section){
+	var addCourseToPage = function(title, description, section, arrowWanted){
 		var liTag = $('<li/>').appendTo('.' + section);
 		liTag.addClass("table-view-cell media searched-course");
 		var aTag = $("<a/>");
-		aTag.addClass("navigate-right");
-		aTag.click(function(){
-			this.closest("li").remove();
-			var classCont = $(this).children().html();
-			classCont = classCont.substring(0, classCont.indexOf('<'));
-			var usrGot = JSON.parse(localStorage.getItem("User"));
-			usrGot.courses.push(classCont);
-			localStorage.setItem('User', JSON.stringify(usrGot));
-			console.log(JSON.parse(localStorage.getItem("User")));
-			
-			// Updates the user due to the new courses
-			$.ajax({
-				url: "/updateuser",
-				type: "POST",
-				data: JSON.stringify(usrGot),
-				contentType: "application/json",
-				dataType: 'json'
-			}).done(function(result){
-				console.log(result);
+		
+		if(arrowWanted == true){
+			aTag.addClass("navigate-right");
+			aTag.click(function(){
+				this.closest("li").remove();
+				var classCont = $(this).children().html();
+				classCont = classCont.substring(0, classCont.indexOf('<'));
+				var usrGot = JSON.parse(localStorage.getItem("User"));
+				usrGot.courses.push(classCont);
+				localStorage.setItem('User', JSON.stringify(usrGot));
+				
+				// Updates the user due to the new courses
+				$.ajax({
+					url: "/updateuser",
+					type: "POST",
+					data: JSON.stringify(usrGot),
+					contentType: "application/json",
+					dataType: 'json'
+				}).done(function(result){
+				});
+				
 			});
-			
-		});
+		}
 		var courseDiv = $("<div>", {"class": "media-body"});
 		liTag.append(aTag);
 		aTag.append(courseDiv);
@@ -340,7 +331,6 @@ $(document).ready(function() {
 	*  Searching Courses Algorithm *
 	*******************************/
 	$("#search").on("keyup", function() {
-		//console.log("Key Up Function triggered!");
 	    var value = $(this).val();
 	    
 		if(value != "" && value != " "){
@@ -354,7 +344,7 @@ $(document).ready(function() {
 					rmvCourses();
 					var allCourses = courses.courses;
 					allCourses.forEach(function(course){
-						addCourseToPage(course.name + " " + course.title, course.description, "classes-section");	
+						addCourseToPage(course.name + " " + course.title, course.description, "classes-section", true);	
 					});
 				});
 		}
@@ -413,7 +403,6 @@ $(document).ready(function() {
 					contentType: "application/json",
 					dataType: 'json'
 				}).done(function(result){
-					console.log(result);
 				});   
 		    }
 		});
@@ -509,7 +498,6 @@ $(document).ready(function() {
 			var courseBoardArrow = $(".course-page");
 			if (courseBoardArrow != null) {
 				courseBoardArrow.click(function() {
-					console.log($(this).text());
 					localStorage.setItem("selected-course", $(this).text());
 					window.location.href = "course.html";
 				});
@@ -521,12 +509,10 @@ $(document).ready(function() {
 	*  Detects if user is on profile page	 *
 	******************************************/
 	if(window.location.href == "https://attendia-sweng411-real-abdallahozaifa.c9users.io/profile.html"){
-		console.log("Were on profile page!");
 		changeProfile();
 	}
 	
 	if(window.location.href == "https://attendia-sweng411-real-abdallahozaifa.c9users.io/messages.html"){
-		console.log("Were on messages page!");
 		var msgQuery = {courseName: localStorage.getItem('selected-course')};
 
 		$.ajax({
@@ -537,7 +523,6 @@ $(document).ready(function() {
 			dataType: 'json'
 		}).done(function(result){
 			var msgArr = result.messages;
-			console.log(msgArr);
 			msgArr.forEach(function(msgObj){
 				addMessagesToPage(msgObj.studentName, msgObj.message);
 			});
@@ -550,20 +535,23 @@ $(document).ready(function() {
 	*  	 *
 	******************************************/
 	if(separateCrInfo != null){
-		var slctedCrs = localStorage.getItem('selected-course');
-		var wrdArr = slctedCrs.split(" ");
-		var clsNm = wrdArr[0] + " " + wrdArr[1];
-		console.log(clsNm);
-		$.ajax({
-			url: "/findCourse",
-			type: "POST",
-			data: JSON.stringify({courseName: clsNm}),
-			contentType: "application/json",
-			dataType: 'json'
-		}).done(function(course){
-			var crs = course.courseObj;
-			addCourseToPage(crs.name + " " + crs.title, crs.description, "separate-course-section");
-		});
+		if(localStorage.getItem('selected-course') != null){
+			var slctedCrs = localStorage.getItem('selected-course');
+			var wrdArr = slctedCrs.split(" ");
+			var clsNm = wrdArr[0] + " " + wrdArr[1];
+			$.ajax({
+				url: "/findCourse",
+				type: "POST",
+				data: JSON.stringify({courseName: clsNm}),
+				contentType: "application/json",
+				dataType: 'json'
+			}).done(function(course){
+				var crs = course.courseObj;
+				if(crs != null){
+					addCourseToPage(crs.name + " " + crs.title, crs.description, "separate-course-section", false);
+				}
+			});
+		}
 	}
 	
 });
