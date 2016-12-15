@@ -11,6 +11,7 @@ $(document).ready(function() {
 	var leftArrowBtn = $(".appstart-left");
 	var msgLeftArrowBtn = $(".messageboard-left");
 	var crsLeftArrowBtn = $(".courseboard-left");
+	var postMsgLeftArrow = $(".postMessage-left");
 	var fullName = $(".full-name");
 	var email = $(".email");
 	var userName = $(".username");
@@ -26,6 +27,11 @@ $(document).ready(function() {
 	var findCoursesItem = $(".findcourses-item");
 	var logOutItem = $(".logout-item");
 	var selectedCrsNmField = $(".selected-coursename");
+	var postAMessageBtn = $(".post-a-messageBtn");
+	var txtAreaMessage = $(".textarea-message");
+	var postMsgBtn = $(".postMessageBtn");
+	var atndBtn = $(".attendanceBtn");
+	var separateCrInfo = $(".separate-course-section");
 	var UserFetched, identity = null;
 
 	/****************************************
@@ -36,6 +42,50 @@ $(document).ready(function() {
 		// User clicks sign in page on index page
 		signInBtn.click(function() {
 			window.location.href = "signin.html";
+		});
+	}
+	
+	console.log(atndBtn);
+	if(atndBtn != null){
+		atndBtn.attr('href','#attendanceBtn');
+		//$(".pop-upmenu").hide();
+		console.log();
+	}
+
+	if(postMsgBtn != null){
+		// User clicks sign in page on index page
+		postMsgBtn.click(function() {
+			if(txtAreaMessage != null && txtAreaMessage != ""){
+				console.log(txtAreaMessage.val());
+				var slctedCrs = localStorage.getItem("selected-course");
+				var stdName = JSON.parse(localStorage.getItem('User')).fullName;
+				var msg = {
+					courseName: slctedCrs, 
+					courseMessage: txtAreaMessage.val(),
+					studentName: stdName
+				};
+				
+				console.log(msg);
+				
+				$.ajax({
+					url: "/postCourseMessage",
+					type: "POST",
+					data: JSON.stringify(msg),
+					contentType: "application/json",
+					dataType: 'json'
+				}).done(function(result){
+					console.log(result);
+				});
+			}
+			
+			window.location.href = "messages.html";
+		});
+	}
+
+	if(postAMessageBtn != null){
+		// User clicks sign in page on index page
+		postAMessageBtn.click(function() {
+			window.location.href = "postamessage.html";
 		});
 	}
 	
@@ -73,6 +123,13 @@ $(document).ready(function() {
 	if (crsLeftArrowBtn != null) {
 		crsLeftArrowBtn.click(function() {
 			window.location.href = "courses.html";
+		});
+	}
+	
+	// User clicks left navigation arrow
+	if (postMsgLeftArrow != null) {
+		postMsgLeftArrow.click(function() {
+			window.location.href = "messages.html";
 		});
 	}
 	
@@ -196,8 +253,8 @@ $(document).ready(function() {
 	/**************************************************
 	*  Add Courses to the users findcourses.html page *
 	***************************************************/ 	
-	var addCourseToPage = function(title, description){
-		var liTag = $('<li/>').appendTo('.classes-section');
+	var addCourseToPage = function(title, description, section){
+		var liTag = $('<li/>').appendTo('.' + section);
 		liTag.addClass("table-view-cell media searched-course");
 		var aTag = $("<a/>");
 		aTag.addClass("navigate-right");
@@ -229,6 +286,19 @@ $(document).ready(function() {
 		courseDiv.append("<p>" + description + "</p>");
 	};
 	
+	/**************************************************
+	*  Add Courses to the users messages.html page    *
+	***************************************************/ 	
+	var addMessagesToPage = function(studentName, studentMessage){
+		var liTag = $('<li/>').appendTo('.messages-section');
+		liTag.addClass("table-view-cell media");
+		var aTag = $("<a/>");
+		var courseDiv = $("<div>", {"class": "media-body"});
+		liTag.append(aTag);
+		aTag.append(courseDiv);
+		courseDiv.text(studentName);
+		courseDiv.append("<p>" + studentMessage + "</p>");
+	};
 	
 	/**************************************************
 	*  Add Courses to the users courses.html page *
@@ -246,12 +316,12 @@ $(document).ready(function() {
 	/**************************************************
 	*  Add Courses to the users messageboard.html page *
 	***************************************************/
-	var addMsgBoxCourses = function(courseInfo){
+	var addMsgBoxCourses = function(courseInfo, numOfMessages){
 		var liTag = $('<li/>').appendTo('.my-courses-table');
 		liTag.addClass("table-view-cell ");
 		var aTag = $("<a/>");
 		aTag.addClass("navigate-right messageboard-arrow");
-		var span = $('<span/>').addClass('badge').html('1');
+		var span = $('<span/>').addClass('badge').html(numOfMessages);
 		liTag.append(aTag);
 		aTag.html(courseInfo);
 		aTag.append(span);
@@ -284,7 +354,7 @@ $(document).ready(function() {
 					rmvCourses();
 					var allCourses = courses.courses;
 					allCourses.forEach(function(course){
-						addCourseToPage(course.name + " " + course.title, course.description);	
+						addCourseToPage(course.name + " " + course.title, course.description, "classes-section");	
 					});
 				});
 		}
@@ -409,12 +479,29 @@ $(document).ready(function() {
 		if(usrRegisteredCourses != null){
 			usrRegisteredCourses.forEach(function(crsName){
 				addUsrCourses(crsName);
-				addMsgBoxCourses(crsName);
+				
+				// var msgQuery = {courseName: localStorage.getItem('selected-course')};
+				// $.ajax({
+				// 	url: "/getcoursemessages",
+				// 	type: "POST",
+				// 	data: JSON.stringify(msgQuery),
+				// 	contentType: "application/json",
+				// 	dataType: 'json'
+				// }).done(function(result){
+				// 	var msgArr = result.messages;
+				// 	console.log(msgArr);
+				// 	addMsgBoxCourses(crsName, msgArr.length);
+				// });
+				addMsgBoxCourses(crsName, 1);
 			});
 			
 			var messageBoardArrow = $(".messageboard-arrow");
 			if (messageBoardArrow != null) {
 				messageBoardArrow.click(function() {
+					var slctedCrs = $(this).text();
+					var wrdArr = slctedCrs.split(" ");
+					var clsNm = wrdArr[0] + " " + wrdArr[1];
+					localStorage.setItem("selected-course", clsNm);
 					window.location.href = "messages.html";
 				});
 			}
@@ -436,6 +523,47 @@ $(document).ready(function() {
 	if(window.location.href == "https://attendia-sweng411-real-abdallahozaifa.c9users.io/profile.html"){
 		console.log("Were on profile page!");
 		changeProfile();
+	}
+	
+	if(window.location.href == "https://attendia-sweng411-real-abdallahozaifa.c9users.io/messages.html"){
+		console.log("Were on messages page!");
+		var msgQuery = {courseName: localStorage.getItem('selected-course')};
+
+		$.ajax({
+			url: "/getcoursemessages",
+			type: "POST",
+			data: JSON.stringify(msgQuery),
+			contentType: "application/json",
+			dataType: 'json'
+		}).done(function(result){
+			var msgArr = result.messages;
+			console.log(msgArr);
+			msgArr.forEach(function(msgObj){
+				addMessagesToPage(msgObj.studentName, msgObj.message);
+			});
+		});
+		
+		
+	}
+	
+	/*****************************************
+	*  	 *
+	******************************************/
+	if(separateCrInfo != null){
+		var slctedCrs = localStorage.getItem('selected-course');
+		var wrdArr = slctedCrs.split(" ");
+		var clsNm = wrdArr[0] + " " + wrdArr[1];
+		console.log(clsNm);
+		$.ajax({
+			url: "/findCourse",
+			type: "POST",
+			data: JSON.stringify({courseName: clsNm}),
+			contentType: "application/json",
+			dataType: 'json'
+		}).done(function(course){
+			var crs = course.courseObj;
+			addCourseToPage(crs.name + " " + crs.title, crs.description, "separate-course-section");
+		});
 	}
 	
 });

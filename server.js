@@ -143,7 +143,7 @@ app.post('/userinfo', function(req, res){
 app.post('/updateuser', function(req, res){
     var user = req.body;
 
-    // Connecting to Mongo Database Server and searching for user
+        // Connecting to Mongo Database Server and updating a user
        MongoClient.connect(url, function(err, db) {
           assert.equal(null, err);
           console.log("Connected correctly to server.");
@@ -166,6 +166,58 @@ app.post('/updateuser', function(req, res){
 
        });
 });
+
+app.post('/postCourseMessage', function(req, res){
+    var msg = req.body;
+        
+        // Connecting to Mongo Database Server and adding a message
+       MongoClient.connect(url, function(err, db) {
+          assert.equal(null, err);
+          console.log("Connected correctly to server.");
+          
+          Course.findCourse(db, msg.courseName, function(course){
+              console.log(course);
+              var newUpdatedCrs = course;
+              var msgObj = {
+                  studentName: msg.studentName,
+                  message: msg.courseMessage 
+              };
+              newUpdatedCrs.messages.push(msgObj);
+              Course.updateCourse(db, msg.courseName, newUpdatedCrs, function(){
+                    res.send({response: "Course Message Added Successfully!"});
+              });
+          });
+          
+       });
+});
+
+app.post('/getcoursemessages', function(req, res) {
+    var courseName = req.body.courseName;
+    console.log(courseName);
+    
+    // Connecting to Mongo Database Server 
+    MongoClient.connect(url, function(err, db) {
+        assert.equal(null, err);
+        Course.findCourse(db, courseName, function(course){
+            res.send({messages: course.messages});
+        });
+    });
+});
+
+app.post('/findCourse', function(req, res) {
+    var courseName = req.body.courseName;
+    console.log(courseName);
+    
+    // Connecting to Mongo Database Server 
+    MongoClient.connect(url, function(err, db) {
+        assert.equal(null, err);
+        Course.findCourse(db, courseName, function(course){
+            res.send({courseObj: course});
+        });
+    });
+});
+
+
 
 /* Listens on the Server Port */
 var server = app.listen(process.env.PORT || '8080', '0.0.0.0', function() {
