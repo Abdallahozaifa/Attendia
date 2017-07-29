@@ -6,7 +6,7 @@ var bodyParser = require("body-parser");
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
 var User = require('./server_modules/User');
-var url = 'mongodb://localhost:27017/attendia';
+var url = process.env.MONGODB_URI;
 var ObjectId = require('mongodb').ObjectID;
 var Course = require("./server_modules/Course");
 
@@ -21,7 +21,6 @@ app.use(bodyParser.urlencoded({
     extended: false
 }));
 app.use(bodyParser.json());
-
 
 /* Main Page for Slide Master */
 app.get('/', function(req, res) {
@@ -41,7 +40,7 @@ app.post('/searchCourse', function(req, res) {
     
     // Connecting to Mongo Database Server and searching for course
     MongoClient.connect(url, function(err, db) {
-        // assert.equal(null, err);
+        assert.equal(null, err);
         console.log("Connected correctly to server.");
         var courseNames = [], courses = [], courseHit = [];
         
@@ -66,7 +65,7 @@ app.post('/searchCourse', function(req, res) {
         
         setTimeout(function(){
             courseHit = courseHit.filter(function(item, index, inputArray) {
-               return inputArray.indexOf(item) == index;
+              return inputArray.indexOf(item) == index;
             });
             console.log(courseHit);
             courseHit.forEach(function(index){
@@ -96,7 +95,7 @@ app.post('/userinfo', function(req, res){
         
        // Connecting to Mongo Database Server and searching for user
        MongoClient.connect(url, function(err, db) {
-        //   assert.equal(null, err);
+          assert.equal(null, err);
           console.log("Connected correctly to server.");
         
           User.findUser(db, userSearch, function(user){
@@ -150,7 +149,7 @@ app.post('/updateuser', function(req, res){
 
         // Connecting to Mongo Database Server and updating a user
        MongoClient.connect(url, function(err, db) {
-        //   assert.equal(null, err);
+          assert.equal(null, err);
           console.log("Connected correctly to server.");
           
           var newUsrObj = {
