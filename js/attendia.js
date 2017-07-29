@@ -33,6 +33,8 @@ $(document).ready(function() {
 	var separateCrInfo = $(".separate-course-section");
 	var UserFetched, identity = null;
 
+	var body = $("body");
+	document.body.style.zoom=0.7;
 	/****************************************
 	*      Click Handlers for Components    *
 	****************************************/   
@@ -101,7 +103,7 @@ $(document).ready(function() {
 	// User clicks left navigation arrow
 	if (leftArrowBtn != null) {
 		leftArrowBtn.click(function() {
-			window.location.href = "index.html";
+			window.location.href = "/";
 		});
 	}
 	
@@ -169,7 +171,7 @@ $(document).ready(function() {
 		logOutItem.click(function() {
 			localStorage.setItem("User", null);
 			localStorage.setItem("selected-course", null);
-			window.location.href = "index.html";
+			window.location.href = "/";
 		});
 	}
 	

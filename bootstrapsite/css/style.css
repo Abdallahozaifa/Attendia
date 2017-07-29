@@ -1,0 +1,13 @@
+.container{
+    width:50%;
+}
+
+#page-top > header > div > div > div:nth-child(2) > div > div > div{
+    top: -10%;
+    right: 100%;
+}
+
+#attendia-app{
+    height: 100%;
+    width:100%;
+}

@@ -12,6 +12,7 @@ var Course = require("./server_modules/Course");
 
 /* Serving static files in express */
 app.use(express.static('html'));
+app.use('/bootstrapsite', express.static('bootstrapsite'));
 app.use('/js', express.static('js'));
 app.use('/css', express.static('css'));
 app.use('/ratchet', express.static('ratchet'));
@@ -23,7 +24,7 @@ app.use(bodyParser.json());
 
 
 /* Main Page for Slide Master */
-app.get('/index.html', function(req, res) {
+app.get('/', function(req, res) {
 
     /* Sends the index html page to the user */
     fs.readFile('index.html', 'utf8', function(err, data) {
