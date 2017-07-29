@@ -40,7 +40,7 @@ app.post('/searchCourse', function(req, res) {
     
     // Connecting to Mongo Database Server and searching for course
     MongoClient.connect(url, function(err, db) {
-        assert.equal(null, err);
+        // assert.equal(null, err);
         console.log("Connected correctly to server.");
         var courseNames = [], courses = [], courseHit = [];
         
@@ -95,7 +95,7 @@ app.post('/userinfo', function(req, res){
         
        // Connecting to Mongo Database Server and searching for user
        MongoClient.connect(url, function(err, db) {
-          assert.equal(null, err);
+        //   assert.equal(null, err);
           console.log("Connected correctly to server.");
         
           User.findUser(db, userSearch, function(user){
@@ -126,7 +126,7 @@ app.post('/userinfo', function(req, res){
        
        // Connecting to Mongo Database Server and searching for user
        MongoClient.connect(url, function(err, db) {
-          assert.equal(null, err);
+        //   assert.equal(null, err);
           console.log("Connected correctly to server.");
           
           
@@ -149,7 +149,7 @@ app.post('/updateuser', function(req, res){
 
         // Connecting to Mongo Database Server and updating a user
        MongoClient.connect(url, function(err, db) {
-          assert.equal(null, err);
+        //   assert.equal(null, err);
           console.log("Connected correctly to server.");
           
           var newUsrObj = {
@@ -162,7 +162,7 @@ app.post('/updateuser', function(req, res){
           
           // Updates the user
           User.updateUser(db, ObjectId(user["_id"]).valueOf(), newUsrObj, function(err, status){
-              assert.equal(null, err);
+            //   assert.equal(null, err);
               if(status.result.nModified == 1){
                 res.send({response: "User Updated Successfully!"});
                 db.close();

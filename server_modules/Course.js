@@ -6,7 +6,7 @@
     
     var insertCourse = function(db, course, callback) {
        db.collection('courses').insertOne(course, function(err, result) {
-        assert.equal(err, null);
+        // assert.equal(err, null);
         console.log("Inserted a course into the courses collection.");
         callback();
       });
@@ -14,7 +14,7 @@
     
     var findCourse= function(db, courseName, callback) {
        db.collection('courses').findOne({name: courseName}, function(err, usr){
-            assert.equal(null, err);
+            // assert.equal(null, err);
             callback(usr);
        });
     };

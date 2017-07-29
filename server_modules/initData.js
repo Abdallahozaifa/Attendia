@@ -57,29 +57,29 @@ MongoClient.connect(url, function(err, db) {
     assert.equal(null, err);
     console.log("Connected correctly to server.");
 
-    Course.insertCourse(db, Math41, function(){
-          console.log(Math41.name + " was successfully Added to the database!");
-    });
+    // Course.insertCourse(db, Math41, function(){
+    //       console.log(Math41.name + " was successfully Added to the database!");
+    // });
 
-    Course.insertCourse(db, Math110, function(){
-          console.log(Math110.name + " was successfully Added to the database!");
-    });
+    // Course.insertCourse(db, Math110, function(){
+    //       console.log(Math110.name + " was successfully Added to the database!");
+    // });
 
-    Course.insertCourse(db, Math141, function(){
-          console.log(Math141.name + " was successfully Added to the database!");
-    });
+    // Course.insertCourse(db, Math141, function(){
+    //       console.log(Math141.name + " was successfully Added to the database!");
+    // });
 
-    Course.insertCourse(db, CMPSC122, function(){
-          console.log(CMPSC122.name + " was successfully Added to the database!");
-    });
+    // Course.insertCourse(db, CMPSC122, function(){
+    //       console.log(CMPSC122.name + " was successfully Added to the database!");
+    // });
 
-    Course.insertCourse(db, CHEM112, function(){
-          console.log(CHEM112.name + " was successfully Added to the database!");
-    });
+    // Course.insertCourse(db, CHEM112, function(){
+    //       console.log(CHEM112.name + " was successfully Added to the database!");
+    // });
 
-    Course.findCourse(db, {name: "MATH 41"}, function(course){
-        console.log(course);
-    });
+    // Course.findCourse(db, {name: "MATH 41"}, function(course){
+    //     console.log(course);
+    // });
 
     // var searchString = "c";
     // var courseNames = [], courses = [];
