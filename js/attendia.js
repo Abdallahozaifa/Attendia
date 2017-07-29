@@ -34,7 +34,7 @@ $(document).ready(function() {
 	var UserFetched, identity = null;
 
 	var body = $("body");
-	document.body.style.zoom=0.7;
+	document.body.style.zoom=1.0;
 	/****************************************
 	*      Click Handlers for Components    *
 	****************************************/   
