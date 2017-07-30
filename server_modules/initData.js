@@ -1,7 +1,7 @@
 var Course = require("./Course");
 var MongoClient = require('mongodb').MongoClient;
 var assert = require('assert');
-var url = 'mongodb://localhost:27017/attendia';
+var url = "";
 var ObjectId = require('mongodb').ObjectID;
 var User = require("./User");
 
@@ -57,29 +57,29 @@ MongoClient.connect(url, function(err, db) {
     assert.equal(null, err);
     console.log("Connected correctly to server.");
 
-    // Course.insertCourse(db, Math41, function(){
-    //       console.log(Math41.name + " was successfully Added to the database!");
-    // });
+    Course.insertCourse(db, Math41, function(){
+          console.log(Math41.name + " was successfully Added to the database!");
+    });
 
-    // Course.insertCourse(db, Math110, function(){
-    //       console.log(Math110.name + " was successfully Added to the database!");
-    // });
+    Course.insertCourse(db, Math110, function(){
+          console.log(Math110.name + " was successfully Added to the database!");
+    });
 
-    // Course.insertCourse(db, Math141, function(){
-    //       console.log(Math141.name + " was successfully Added to the database!");
-    // });
+    Course.insertCourse(db, Math141, function(){
+          console.log(Math141.name + " was successfully Added to the database!");
+    });
 
-    // Course.insertCourse(db, CMPSC122, function(){
-    //       console.log(CMPSC122.name + " was successfully Added to the database!");
-    // });
+    Course.insertCourse(db, CMPSC122, function(){
+          console.log(CMPSC122.name + " was successfully Added to the database!");
+    });
 
-    // Course.insertCourse(db, CHEM112, function(){
-    //       console.log(CHEM112.name + " was successfully Added to the database!");
-    // });
+    Course.insertCourse(db, CHEM112, function(){
+          console.log(CHEM112.name + " was successfully Added to the database!");
+    });
 
-    // Course.findCourse(db, {name: "MATH 41"}, function(course){
-    //     console.log(course);
-    // });
+    Course.findCourse(db, {name: "MATH 41"}, function(course){
+        console.log(course);
+    });
 
     // var searchString = "c";
     // var courseNames = [], courses = [];
@@ -128,16 +128,16 @@ MongoClient.connect(url, function(err, db) {
         
     // });
     
-    User.findAllUsers(db, function(user) {
-        console.log(user);
-    });
-    var crs =   {
-        name: 'MATH 141',
-        title: 'Calculus with Analytic Geometry II ',
-        description: 'Derivatives, integrals, applications; sequences and series; analytic geometry; polar coordinates. Students may take only one course for credit from MATH 141, 141B, and 141H.',
-        messages: [],
-        students: [] 
-    };
+    // User.findAllUsers(db, function(user) {
+    //     console.log(user);
+    // });
+    // var crs =   {
+    //     name: 'MATH 141',
+    //     title: 'Calculus with Analytic Geometry II ',
+    //     description: 'Derivatives, integrals, applications; sequences and series; analytic geometry; polar coordinates. Students may take only one course for credit from MATH 141, 141B, and 141H.',
+    //     messages: [],
+    //     students: [] 
+    // };
 
     // Course.updateCourse(db, "MATH 141", crs, function(){
        
