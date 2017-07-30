@@ -103,7 +103,7 @@ $(document).ready(function() {
 	// User clicks left navigation arrow
 	if (leftArrowBtn != null) {
 		leftArrowBtn.click(function() {
-			window.location.href = "/";
+			window.location.href = "/app";
 		});
 	}
 	
