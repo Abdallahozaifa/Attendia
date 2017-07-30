@@ -171,7 +171,7 @@ $(document).ready(function() {
 		logOutItem.click(function() {
 			localStorage.setItem("User", null);
 			localStorage.setItem("selected-course", null);
-			window.location.href = "/";
+			window.location.href = "/app";
 		});
 	}
 	
